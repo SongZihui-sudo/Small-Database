@@ -1,4 +1,5 @@
 A small database based on TXT document processing, C++, haha. . . . 😂😉
+# [中文]()  
 # Using help:  
 Operate with the help of a command line interface. Each user created is equivalent to creating a new txt document, storing user information (user name and password) in the first two lines of the document, and then storing the data.
 ### Data structure:
