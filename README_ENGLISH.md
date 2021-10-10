@@ -12,4 +12,4 @@ A string + an integer number + a pointer form a linked list, and the user inform
 5.read reads a user's data.  
 6.write write a user's data.  
 7.find -d Find data in user data.  
-##. . . There are more, waiting for follow-up updates, 😉😉.  
+## . . . There are more, waiting for follow-up updates, 😉😉.  
