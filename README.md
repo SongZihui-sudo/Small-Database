@@ -1,5 +1,5 @@
 # Small-Database
-## [ENGLISH]()  
+## [ENGLISH](https://githubfast.com/SongZihui-sudo/Small-Database/blob/main/README_ENGLISH.md)  
 一个基于TXT文档处理的小型数据库，C++，哈哈。。。。😂😉  
 # 使用帮助：  
 借助命令行界面进行操作。创建的每一个用户，相当于新建一个txt文档，在文档的前两行存放用户信息（用户名与密码），之后存放数据。  
