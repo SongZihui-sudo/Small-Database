@@ -135,23 +135,75 @@ int database::fileread(class database *init){
             return ERROR;
         }   
             }   
+        while (true){
+            std::string com;
+            std::cout<<"dataline->$:";
+            std::cin>>com;
+            if (com == init->find_d){
+                init->Search(end);
+            }
+            else if (com == init->write){
+                init->filewrite();
+            }
+            else if (com == init->data_exit){
+                break;
+            }
+            else if (com == init->data_add){
+                init->add(init);
+            }
+            else if (com == init->data_change){
+                init->Change(init);
+            }
+            else if (com == init->data_delete){
+                init->Delete(init);
+            }
+            else{
+                std::cout<<"Command is not found!"<<"\n";
+            }
+        }
+    return OK;
+}
+//在数据链中寻找数据
+int database::Search(class database *find_end){
+    char b;        
+    std::string Data_Name;
+    int data_number;         
+    std::cout<<"find the data"<<"\n"<<"what you want to find?"<<"\n"<<"input n (name) or b (number):";
+    if (b == 'n'){    
+        std::cout<<"input data name:";
+        std::cin>>Data_Name;       //读入要查的字符串
+    }
+    else if(b == 'b'){
+        std::cout<<"input data number:";
+        std::cin>>data_number;      //读入数字
+    }
+    else{
+        std::cout<<"Command is not found!"<<"\n";
+    }
+    for (int i = 0; i < size+1; i++){    //通过暴力遍历法寻找数据
+        std::cout<<"finding!"<<std::endl;
+        if (Data_Name == find_end->name || data_number == find_end->number){
+            std::cout<<"postion is"<<i<<std::endl;
+        }
+        find_end = find_end->NeXt;
+    }
     return OK;
 }
 
-int database::Search(class database *s){
-
-}
-
 int database::add(class database *add){
-
+    return OK;
 }
 
 int database::Change(class database *change){
-
+    return OK;
 }
 
 int database::Delete(class database *Del){
-    
+    return OK;
+}
+
+int database::print_to_file(class database *print_to_file){
+    return OK;
 }
 //写入数据
 int database::filewrite(){
@@ -200,4 +252,5 @@ int database::filewrite(){
             return ERROR;
         }
     }
+    return OK;
 }
