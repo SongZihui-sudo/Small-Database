@@ -3,6 +3,9 @@
 #include <string>
 #include "database.h"
 
+using namespace Data_Base;
+
+//主函数
 int main(){   
     Command *co;
     user *USER;
@@ -140,28 +143,28 @@ int database::fileread(class database *init){
             std::cout<<"dataline->$:";
             std::cin>>com;
             if (com == init->find_d){
-                init->Search(end);
+                init->Search(end); //在链表中搜索
             }
             else if (com == init->write){
-                init->filewrite();
+                init->filewrite(); //写入数据
             }
             else if (com == init->data_exit){
-                break;
+                break; //退出登录
             }
             else if (com == init->data_add){
-                init->add(init);
+                init->add(init); //向链表添加数据
             }
             else if (com == init->data_change){
-                init->Change(init);
+                init->Change(init); //修改数据
             }
             else if (com == init->data_delete){
-                init->Delete(init);
+                init->Delete(init); //删除数据
             }
             else{
-                std::cout<<"Command is not found!"<<"\n";
+                std::cout<<"Command is not found!"<<"\n"; //错误处理
             }
         }
-    return OK;
+    return OK; //返回OK
 }
 //在数据链中寻找数据
 int database::Search(class database *find_end){
@@ -185,12 +188,26 @@ int database::Search(class database *find_end){
         if (Data_Name == find_end->name || data_number == find_end->number){
             std::cout<<"postion is"<<i<<std::endl;
         }
-        find_end = find_end->NeXt;
+        find_end = find_end->NeXt; //遍历
     }
     return OK;
 }
 
 int database::add(class database *add){
+    database *temp;
+    temp = new(database);
+    size++;
+    temp = NULL;
+    std::cout<<"input data name:"<<std::endl;
+    std::cin>>temp->name;       //读入要添加的字符串
+    std::cout<<"input number:"<<std::endl;
+    std::cin>>temp->number; //读入要添加的数字
+    temp->NeXt =add;
+    add = temp;
+    std::cout<<"input filename:"<<std::endl; //读入文件名
+    std::string filename;
+    std::cin>>filename;
+    database::print_to_file(add,filename); //向用户文件中重新写入文件
     return OK;
 }
 
@@ -202,7 +219,26 @@ int database::Delete(class database *Del){
     return OK;
 }
 
-int database::print_to_file(class database *print_to_file){
+int database::print_to_file(class database *print_to_file,std::string Filename){
+    std::cout<<"print data to file!"<<std::endl;
+    database *Positive_direction_node;
+    database *Positive_direction_end;     //节点
+    Positive_direction_node = new(database);
+    Positive_direction_end = new(database); //分配内存空间
+    std::fstream print_file(Filename);
+    for (int i = 0; i < size+1; i++){
+        print_to_file->name = Positive_direction_node->name;
+        print_to_file->number = Positive_direction_node->number;
+        Positive_direction_node->NeXt = Positive_direction_end; //重新建立一个保存数据的链表，方向是正向
+        Positive_direction_end = Positive_direction_node;
+        print_to_file = print_to_file->NeXt;
+    }
+    for (int i = 0; i < size+1; i++){
+        print_file<<Positive_direction_end->name<<std::endl;
+        print_file<<Positive_direction_end->number<<std::endl; //写入数据
+        Positive_direction_end = Positive_direction_end->NeXt;
+    }
+    print_file.close();
     return OK;
 }
 //写入数据
@@ -210,7 +246,7 @@ int database::filewrite(){
     user file_user;
     std::cout<<"Write the data"<<"\n"<<"what you want to write?"<<"\n"<<"input dataline's name:";
     std::string filename;
-    std::cin>>filename;
+    std::cin>>filename;     //读入文件名
     std::string user_name;
     int pass_word;
     std::cout<<"input username:";
@@ -230,19 +266,19 @@ int database::filewrite(){
         std::cin>>size;
         std::string UserName;
         int PassWord;
-        fin>>UserName>>PassWord;
+        fin>>UserName>>PassWord; //读取用户名和密码
         std::cout<<"input size:";
         std::cin>>size;
-        if(user_name == UserName && pass_word == PassWord){
+        if(user_name == UserName && pass_word == PassWord){ //判断用户名与密码
             for ( int i = 0; i < size; i++){
                 std::cout<<"input data name:";
                 std::cin>>database::name;
-                f<<database::name<<std::endl;
+                f<<database::name<<std::endl; //读入字符串
                 std::cin.ignore(100,'\n');
                 std::cout<<"input data number:";
-                std::cin>>database::number;
+                std::cin>>database::number; //读入数字
                 f<<database::number<<std::endl;
-                std::cin.ignore(100,'\n');
+                std::cin.ignore(100,'\n'); //清空缓冲区
             }
             f.close();
             return OK;
