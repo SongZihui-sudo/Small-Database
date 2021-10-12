@@ -2,9 +2,8 @@
 #include <fstream>
 #include <string>
 #include "database.h"
-
+//命名空间
 using namespace Data_Base;
-
 //主函数
 int main(){   
     Command *co;
@@ -33,7 +32,7 @@ int user::creat(class user *Creat){
     fout.close(); //关闭文件
     return OK;
 }
-//删除
+//删除用户
 int user::Delete(class user *d){
     std::cout<<"Delete"<<"\n"<<"what you want to Delete?"<<"\n"<<"input dataline's name:";
     std::string filename;
@@ -56,7 +55,7 @@ int user::Delete(class user *d){
     }
     return OK;
 }
-//修改
+//修改用户信息，在还没写入数据时，否则会丢失用户数据
 int user::change(class user *c){
     std::cout<<"Change"<<"\n"<<"what you want to Change?"<<"\n"<<"input dataline's name:";
     std::string filename;
@@ -78,7 +77,7 @@ int user::change(class user *c){
     fout.close(); //关闭文件
         return OK;
     }
-//从用户文件中读取数据并存入链表中
+//从用户文件中读取数据并存入链表中。把文件里的内容读入到内存中
 int database::fileread(class database *init){
     user *file_user;
     database *head; //定义头节点和中间节点
@@ -137,7 +136,8 @@ int database::fileread(class database *init){
             std::cout<<"user or password is mistake!"<<std::endl;     //密码与用户名不对
             return ERROR;
         }   
-            }   
+            }
+    //登陆入用户文件后，进行功能选择   
         while (true){
             std::string com;
             std::cout<<"dataline->$:";
@@ -168,31 +168,18 @@ int database::fileread(class database *init){
 }
 //在数据链中寻找数据
 int database::Search(class database *find_end){
-    char b;        
-    std::string Data_Name;
-    int data_number;         
     std::cout<<"find the data"<<"\n"<<"what you want to find?"<<"\n"<<"input n (name) or b (number):";
-    if (b == 'n'){    
-        std::cout<<"input data name:";
-        std::cin>>Data_Name;       //读入要查的字符串
-    }
-    else if(b == 'b'){
-        std::cout<<"input data number:";
-        std::cin>>data_number;      //读入数字
-    }
-    else{
-        std::cout<<"Command is not found!"<<"\n";
-    }
+    Data_Base::tip();
     for (int i = 0; i < size+1; i++){    //通过暴力遍历法寻找数据
         std::cout<<"finding!"<<std::endl;
-        if (Data_Name == find_end->name || data_number == find_end->number){
+        if (Data_Name == find_end->name || std::stoi(data_number) == find_end->number){
             std::cout<<"postion is"<<i<<std::endl;
         }
         find_end = find_end->NeXt; //遍历
     }
     return OK;
 }
-
+//添加链表元素
 int database::add(class database *add){
     database *temp;
     temp = new(database);
@@ -210,15 +197,46 @@ int database::add(class database *add){
     database::print_to_file(add,filename); //向用户文件中重新写入文件
     return OK;
 }
-
+//修改链表元素
 int database::Change(class database *change){
+    database *per;
+    database *p;
+    per = new(database);
+    p = new(database);
+    p = change;
+    std::cout<<"Change the data in dataline!"<<std::endl;
+    char b;        
+    Data_Base::tip();
+    while ( Data_Name != change->name || std::stoi(data_number) != change->number){
+        per = p;
+        p = p->NeXt;
+        }
+    p->name  = Data_Name;
     return OK;
 }
 
+//删除链表元素
 int database::Delete(class database *Del){
+    database *per;
+    database *p;
+    per = new(database);
+    p = new(database);
+    p = Del->NeXt;
+    std::cout<<"Delete the data in dataline!"<<std::endl;
+    Data_Base::tip();
+    while ( Data_Name == Del->name || std::stoi(data_number) == Del->number){
+        per = p;
+        p = p->NeXt;        
+    }
+    per->NeXt = p->NeXt;
+    size--;
+    std::cout<<"input filename:"<<std::endl; //读入文件名
+    std::string filename;
+    std::cin>>filename;
+    print_to_file( Del , filename );
     return OK;
 }
-
+//向用户文件里打印数据
 int database::print_to_file(class database *print_to_file,std::string Filename){
     std::cout<<"print data to file!"<<std::endl;
     database *Positive_direction_node;
@@ -241,7 +259,7 @@ int database::print_to_file(class database *print_to_file,std::string Filename){
     print_file.close();
     return OK;
 }
-//写入数据
+//写入用户文件数据
 int database::filewrite(){
     user file_user;
     std::cout<<"Write the data"<<"\n"<<"what you want to write?"<<"\n"<<"input dataline's name:";
