@@ -7,7 +7,6 @@
     #define ERROR -1
     //创建用户
     //用户数据以txt文档形式储存
-    int size;
     namespace Data_Base{
         std::string tip();
 
@@ -46,7 +45,8 @@
                 const std::string data_change = "data-change"; 
                 const std::string write = "data-write";
                 const std::string find_d = "data-find -d";
-            public:            
+            public:    
+                int size;
                 database() = default;
                 int Change(class database *change); //修改数据
                 int Delete(class database *Del); //删除数据
@@ -126,25 +126,4 @@
             return OK;
         }
     }
-//选择  
-    std::string Data_Name;
-    std::string data_number ; 
-        std::string tip(){
-            char b;
-            std::cout<<"what you want to Change?"<<"\n"<<"input n (name) or b (number):";
-            if (b == 'n'){    
-                std::cout<<"input data name:";
-                std::cin>>Data_Name;       //读入要查的字符串
-                return Data_Name;
-            }
-            else if(b == 'b'){
-                std::cout<<"input data number:";
-                std::cin>>data_number;      //读入数字
-                return data_number;
-            }
-            else{
-                std::cout<<"Command is not found!"<<"\n";
-            }
-            return OK;
-        }
 #endif
