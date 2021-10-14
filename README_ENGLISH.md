@@ -13,5 +13,5 @@ A string + an integer number + a pointer form a linked list, and the user inform
 6.write write a user's data.  
 7.find -d Find data in user data.  
 ## . . . There are more, waiting for follow-up updates, 😉😉.  
-### 2021-10-15 update
+### 2021-10-14 update
 Complete all the basic functions and modify some BUG.
