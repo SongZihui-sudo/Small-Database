@@ -124,9 +124,9 @@ int database::fileread(class database *init){
                 j++;                    
                 if (j%2 == 0){
                     node->number = std::stoi(line); //读取数据编号                
-                    node = new(database);
                     node->NeXt = end;
-                    end = node;      //建表
+                    end = node;      //建表                    
+                    node = new(database);
                 }
                 else{
                     node->name = line;    //读入链表中数据名                
@@ -139,39 +139,25 @@ int database::fileread(class database *init){
             return ERROR;
         }   
             }
-    database *Positive_direction_node;
-    database *Positive_direction_end;     //节点
-    Positive_direction_end = new(database); //分配内存空间
-    for (int i = 0; i < sizeof(end)/4; i++){
-        Positive_direction_node = new(database);
-        Positive_direction_node->name = end->NeXt->name ; 
-        Positive_direction_node->number = end->NeXt->number ;
-        Positive_direction_node->NeXt = Positive_direction_end; //重新建立一个保存数据的链表，方向是正向
-        Positive_direction_end = Positive_direction_node;
-        end->NeXt = end->NeXt->NeXt;
-    }
     //登陆入用户文件后，进行功能选择   
         while (true){
             std::string com;
             std::cout<<"dataline->$:";
             std::cin>>com;
             if (com == init->find_d){
-                init->Search(Positive_direction_end); //在链表中搜索
-            }
-            else if (com == init->write){
-                init->filewrite(); //写入数据
+                init->Search(end); //在链表中搜索
             }
             else if (com == init->data_exit){
                 break; //退出登录
             }
             else if (com == init->data_add){
-                init->add(Positive_direction_end); //向链表添加数据
-            }
-            else if (com == init->data_change){
-                init->Change(Positive_direction_end); //修改数据
+                init->add(end); //向链表添加数据
             }
             else if (com == init->data_delete){
-                init->Delete(Positive_direction_end); //删除数据
+                init->Delete(end); //删除数据
+            }
+            else if (com == init->Prints){
+                init->print_to_screen(end);
             }
             else{
                 std::cout<<"Command is not found!"<<"\n"; //错误处理
@@ -223,7 +209,7 @@ int database::add(class database *add){
     std::cout<<"input number:"<<std::endl;
     std::cin>>temp->number; //读入要添加的数字
     temp->NeXt =add->NeXt;
-    add->NeXt = temp;
+    add = temp;
     std::cout<<"input filename:"<<std::endl; //读入文件名
     std::string filename;
     std::cin>>filename;
@@ -231,54 +217,13 @@ int database::add(class database *add){
     fileread(add);
     return OK;
 }
-//修改链表元素
-int database::Change(class database *change){
-    database *per;
-    database *p;
-    per = new(database);
-    p = new(database);
-    std::cout<<"Change the data in dataline!"<<std::endl;
-     char b;        
-    std::string Data_Name;
-    int data_number;         
-    std::cout<<"find the data"<<"\n"<<"what you want to find?"<<"\n"<<"input n (name) or b (number):";
-    std::cin>>b;
-    if (b == 'n'){    
-        std::cout<<"input data name:";
-        std::cin>>Data_Name;       //读入要查的字符串
-        while (Data_Name == p->name || data_number == p->number){
-            per = p;
-            p = p->NeXt;
-        }
-    }
-    else if(b == 'b'){
-        std::cout<<"input data number:";
-        std::cin>>data_number;      //读入数字
-        while (Data_Name == p->name || data_number == p->number){
-            per = p;
-            p = p->NeXt;
-        }
-    }
-    else{
-        std::cout<<"Command is not found!"<<"\n";
-    }
-    
-    per->NeXt = p->NeXt;
-    std::cout<<"input filename:"<<std::endl; //读入文件名
-    std::string filename;
-    std::cin>>filename;
-    print_to_file( change , filename );
-    fileread(change);
-    return OK;
-}
-
 //删除链表元素
 int database::Delete(class database *Del){
     database *per;
     database *p;
     per = new(database);
     p = new(database);
-    p = Del->NeXt;
+    p = Del;
     std::cout<<"Delete the data in dataline!"<<std::endl;
     char b;        
     std::string Data_Name;
@@ -303,86 +248,46 @@ int database::Delete(class database *Del){
     }
     else{
         std::cout<<"Command is not found!"<<"\n";
+        return ERROR;
     }
-    
     per->NeXt = p->NeXt;
-    database::size--;
+    p->number = '\n';
     std::cout<<"input filename:"<<std::endl; //读入文件名
     std::string filename;
     std::cin>>filename;
-    print_to_file( Del , filename );
-    fileread(Del);
+    print_to_file( per , filename );
+    fileread(per);
     return OK;
 }
 //向用户文件里打印数据
 int database::print_to_file(class database *print_to_file,std::string Filename){
     std::fstream print_file(Filename);
     std::cout<<"print data to file!"<<std::endl;
-    database *positive_direction_node;
-    database *positive_direction_end;     //节点
-    positive_direction_end = new(database); //分配内存空间
+    database *Positive_direction_node;
+    database *Positive_direction_end;     //节点
+    Positive_direction_end = new(database); //分配内存空间
     for (int i = 0; i < sizeof(print_to_file)/4; i++){
-        positive_direction_node = new(database);
-        positive_direction_node->name = print_to_file->NeXt->name ; 
-        positive_direction_node->number = print_to_file->NeXt->number ;
-        positive_direction_node->NeXt = positive_direction_end; //重新建立一个保存数据的链表，方向是正向
-        positive_direction_end = positive_direction_node;
-        print_to_file->NeXt = print_to_file->NeXt->NeXt;
+        Positive_direction_node = new(database);
+        Positive_direction_node->name = print_to_file->name ; 
+        Positive_direction_node->number = print_to_file->number ;
+        Positive_direction_node->NeXt = Positive_direction_end; //重新建立一个保存数据的链表，方向是正向
+        Positive_direction_end = Positive_direction_node;
+        print_to_file = print_to_file->NeXt;
     }
     for (int i = 0; i < sizeof(print_to_file)/4; i++){
-        print_file<<positive_direction_end->name<<std::endl;
-        print_file<<positive_direction_end->number<<std::endl; //写入数据
-        positive_direction_end = positive_direction_end->NeXt;
+        print_file<<Positive_direction_end->name<<std::endl;
+        print_file<<Positive_direction_end->number<<std::endl; //写入数据
+        Positive_direction_end = Positive_direction_end->NeXt;
     }
     print_file.close();
     return OK;
 }
-//写入用户文件数据
-int database::filewrite(){
-    user file_user;
-    std::cout<<"Write the data"<<"\n"<<"what you want to write?"<<"\n"<<"input dataline's name:";
-    std::string filename;
-    std::cin>>filename;     //读入文件名
-    std::string user_name;
-    int pass_word;
-    std::cout<<"input username:";
-    std::cin>>user_name;
-    std::cout<<"input passsword:";
-    std::cin>>pass_word;
-    std::cin.ignore(100,'\n');
-    if (file_user.search(filename)){
-        std::cout<<"not find!"<<std::endl;
-            return ERROR; //没找都相关文件 
-            }
-    else{
-        std::ifstream fin(filename);
-        std::fstream f;
-        f.open(filename,std::ios::app);
-        std::cin.ignore(100,'\n');
-        std::cin>>database::size;
-        std::string UserName;
-        int PassWord;
-        fin>>UserName>>PassWord; //读取用户名和密码
-        std::cout<<"input size:";
-        std::cin>>database::size;
-        if(user_name == UserName && pass_word == PassWord){ //判断用户名与密码
-            for ( int i = 0; i < database::size; i++){
-                std::cout<<"input data name:";
-                std::cin>>database::name;
-                f<<database::name<<std::endl; //读入字符串
-                std::cin.ignore(100,'\n');
-                std::cout<<"input data number:";
-                std::cin>>database::number; //读入数字
-                f<<database::number<<std::endl;
-                std::cin.ignore(100,'\n'); //清空缓冲区
-            }
-            f.close();
-            return OK;
-            }
-        else{
-            std::cout<<"user or password is mistake!"<<std::endl;     //密码与用户名不对
-            return ERROR;
-        }
+//先屏幕打印输出用户数据内容
+int database::print_to_screen(database *prints){
+    for (int i = 0; i < sizeof(prints)+1; i++){
+        std::cout<<prints->NeXt->name<<std::endl;           //循环遍历输出链表内容
+        std::cout<<prints->NeXt->number<<std::endl;
+        prints->NeXt = prints->NeXt->NeXt;
     }
     return OK;
 }
