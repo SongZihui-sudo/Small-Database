@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include "database.h"
-
 //命名空间
 using namespace Data_Base;
 //主函数
@@ -41,6 +40,11 @@ int user::Delete(class user *d){
     const char* file_name;
     file_name = filename.c_str(); 
     if (d->search(filename)){ //读入数据链名判断是否存在，存在则调用remove删除
+        std::cout<<"not found!"<<"\n";
+        return ERROR; //没找到相关文件 
+    }
+    else{
+       
         if (std::remove(file_name) == 0){
             std::cout<<"delete successful"<<"\n";
             return OK; //删除成功
@@ -49,10 +53,6 @@ int user::Delete(class user *d){
             std::cout<<"delete false!"<<"\n";
             return ERROR; //删除失败
         } 
-    }
-    else{
-        std::cout<<"not found!"<<"\n";
-        return ERROR; //没找到相关文件
     }
     return OK;
 }
@@ -105,7 +105,7 @@ int database::fileread(class database *init){
     std::cin>>pass_word;
     if (file_user->search(filename)){ //判断文件是否存在
         std::cout<<"not find!"<<std::endl;
-        file_user->creat(file_user);   //文件不存在，新建一个
+        std::cout<<"prease input creat to creat a user"<<std::endl;
         return ERROR; //没找都相关文件
     } 
     else{
@@ -141,9 +141,7 @@ int database::fileread(class database *init){
     database *Positive_direction_node;
     database *Positive_direction_end;     //节点
     Positive_direction_end = new(database); //分配内存空间
-    std::cout<<"input size:";
-    std::cin>>database::size;
-    for (int i = 0; i < database::size+1; i++){
+    for (int i = 0; i < sizeof(end)/4; i++){
         Positive_direction_node = new(database);
         Positive_direction_node->name = end->NeXt->name ; 
         Positive_direction_node->number = end->NeXt->number ;
@@ -201,7 +199,7 @@ int database::Search(class database *find_end){
     for (int i = 0; i < size+1; i++){    //通过暴力遍历法寻找数据
         std::cout<<"finding!"<<std::endl;
         if (Data_Name == find_end->name || data_number == find_end->number){
-            std::cout<<"postion is"<<i<<std::endl;
+            std::cout<<"postion is "<<i<<std::endl;
         }
         find_end = find_end->NeXt; //遍历
     }
@@ -212,13 +210,12 @@ int database::add(class database *add){
     database *temp;
     temp = new(database);
     size++;
-    temp = NULL;
     std::cout<<"input data name:"<<std::endl;
     std::cin>>temp->name;       //读入要添加的字符串
     std::cout<<"input number:"<<std::endl;
     std::cin>>temp->number; //读入要添加的数字
-    temp->NeXt =add;
-    add = temp;
+    temp->NeXt =add->NeXt;
+    add->NeXt = temp;
     std::cout<<"input filename:"<<std::endl; //读入文件名
     std::string filename;
     std::cin>>filename;
@@ -313,10 +310,21 @@ int database::Delete(class database *Del){
 int database::print_to_file(class database *print_to_file,std::string Filename){
     std::fstream print_file(Filename);
     std::cout<<"print data to file!"<<std::endl;
-    for (int i = 0; i < database::size+1; i++){
-        print_file<<print_to_file->name<<std::endl;
-        print_file<<print_to_file->number<<std::endl; //写入数据
-        print_to_file = print_to_file->NeXt;
+    database *positive_direction_node;
+    database *positive_direction_end;     //节点
+    positive_direction_end = new(database); //分配内存空间
+    for (int i = 0; i < sizeof(print_to_file)/4; i++){
+        positive_direction_node = new(database);
+        positive_direction_node->name = print_to_file->NeXt->name ; 
+        positive_direction_node->number = print_to_file->NeXt->number ;
+        positive_direction_node->NeXt = positive_direction_end; //重新建立一个保存数据的链表，方向是正向
+        positive_direction_end = positive_direction_node;
+        print_to_file->NeXt = print_to_file->NeXt->NeXt;
+    }
+    for (int i = 0; i < sizeof(print_to_file)/4; i++){
+        print_file<<positive_direction_end->name<<std::endl;
+        print_file<<positive_direction_end->number<<std::endl; //写入数据
+        positive_direction_end = positive_direction_end->NeXt;
     }
     print_file.close();
     return OK;
