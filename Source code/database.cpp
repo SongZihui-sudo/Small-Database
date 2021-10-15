@@ -13,6 +13,7 @@ int main(){
     co = new(Command);
     Data = new(database);
     co->comander(co,USER,Data);
+    system("pause");
 }
 //创建用户
 int user::creat(class user *Creat){
@@ -188,20 +189,27 @@ int database::Search(class database *find_end){
     if (b == 'n'){    
         std::cout<<"input data name:";
         std::cin>>Data_Name;       //读入要查的字符串
+        for (int i = 0; i < sizeof(find_end)/4+1; i++){    //通过暴力遍历法寻找数据
+            std::cout<<"finding!"<<std::endl;
+            if (Data_Name == find_end->name){
+                std::cout<<"postion is "<<i<<std::endl;
+            }
+        find_end = find_end->NeXt; //遍历
+        }
     }
     else if(b == 'b'){
         std::cout<<"input data number:";
         std::cin>>data_number;      //读入数字
+        for (int i = 0; i < sizeof(find_end)/4+1; i++){    //通过暴力遍历法寻找数据
+            std::cout<<"finding!"<<std::endl;
+            if (data_number == find_end->number){
+                std::cout<<"postion is "<<i<<std::endl;
+            }
+        find_end = find_end->NeXt; //遍历
+        }
     }
     else{
         std::cout<<"Command is not found!"<<"\n";
-    }
-    for (int i = 0; i < size+1; i++){    //通过暴力遍历法寻找数据
-        std::cout<<"finding!"<<std::endl;
-        if (Data_Name == find_end->name || data_number == find_end->number){
-            std::cout<<"postion is "<<i<<std::endl;
-        }
-        find_end = find_end->NeXt; //遍历
     }
     return OK;
 }
