@@ -28,10 +28,11 @@
                 else{
                     return false;
                 }
-            }
+            }                
             int change(class user *c); //修改用户数据
             int Delete(class user *d);  //删除
             int creat(class user *Creat); //创建
+
         }user;
         //数据
         typedef class database{
@@ -42,23 +43,21 @@
                 const std::string data_exit = "data-exit"; 
                 const std::string data_delete = "data-delete";
                 const std::string data_add = "data-add";
-                const std::string data_change = "data-change"; 
-                const std::string write = "data-write";
-                const std::string find_d = "data-find -d";
+                const std::string find_d = "data-find";
+                const std::string Prints ="print";                
             public:    
                 int size;
-                database() = default;
-                int Change(class database *change); //修改数据
+                database() = default;            
                 int Delete(class database *Del); //删除数据
                 int Search(class database *find_end); //查找
                 int add(class database *add); //插入
-                int filewrite();
                 int fileread(database *init);
                 int print_to_file(database *printtofile,std::string Filename);
+                int print_to_screen(database *prints);
         }database;
 //命令行
         typedef class Command{
-            private:
+            private:                
                 const std::string Help = "help";
                 const std::string ChanGe ="change";
                 const std::string Delete = "delete"; //几个关键词
@@ -74,19 +73,18 @@
         }Command;
     //帮助
         void Command::help(){
-                std::cout<<"help"<<"\n";
-            std::cout<<"1.press /help/ to see how to use"<<"\n";
-            std::cout<<"2.press /change/ to change meeage"<<"\n";
-            std::cout<<"3.press /delete/ to delete a dataline"<<"\n";
-            std::cout<<"4.press /creat/ to creat a dataline"<<"\n";
-            std::cout<<"5.press /login/ to login the dataline"<<"\n";
-            std::cout<<"6.press /data-write/ to write the dataline"<<"\n";
-            std::cout<<"7.press /data-find -d/ to find the data"<<"\n";
-            std::cout<<"8.press /data-exit/ to exit the dataline"<<"\n";
-            std::cout<<"9.press /data-delete/ to delete the data in dataline"<<"\n";
-            std::cout<<"10.press /data-add/ to add the data in dataline"<<"\n";
-            std::cout<<"11.press /data-change/ to change the data in dataline"<<"\n";
-            std::cout<<"12.press /exit/ to exit the program"<<"\n";
+            std::cout<<"help"<<"\n";
+            std::cout<<"1.press /help/ to see how to use"<<"\n"; //OK
+            std::cout<<"2.press /change/ to change meeage"<<"\n"; //OK
+            std::cout<<"3.press /delete/ to delete a dataline"<<"\n"; //OK
+            std::cout<<"4.press /creat/ to creat a dataline"<<"\n"; //OK
+            std::cout<<"5.press /login/ to login the dataline"<<"\n"; //OK
+            std::cout<<"7.press /data-find/ to find the data"<<"\n";    //OK
+            std::cout<<"8.press /data-exit/ to exit the dataline"<<"\n"; //OK
+            std::cout<<"9.press /data-delete/ to delete the data in dataline"<<"\n"; //OK
+            std::cout<<"10.press /data-add/ to add the data in dataline"<<"\n";//OK
+            std::cout<<"11.press /exit/ to exit the program"<<"\n";//OK
+            std::cout<<"12.press /print/ to show the data in the dataline"<<"\n";
         }
     //命令行
         int Command::comander(class Command *c,class user *u,class database *data){
@@ -115,11 +113,11 @@
                 }
                 else if (command == c->login){
                     data->fileread(data);
-                }
+                }    
                 else if (command == c->exit){
                     return OK;
                 }
-                else{
+               else{
                     std::cout<<"Command is not found!"<<"\n";
                 }
             }
